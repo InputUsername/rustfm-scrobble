@@ -1,4 +1,4 @@
-use rustfm_scrobble::{Scrobble, Scrobbler};
+use rustfm_scrobble_proxy::{Scrobble, Scrobbler};
 use std::error::Error;
 
 // Example rustfm-scrobble client showing authentication, now playing and

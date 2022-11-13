@@ -13,7 +13,7 @@
 //! 
 //! # Example usage
 //! ```ignore
-//! use rustfm_scrobble::{Scrobble, Scrobbler};
+//! use rustfm_scrobble_proxy::{Scrobble, Scrobbler};
 //! use std::error::Error;
 //!
 //! fn main() -> Result<(), Box<dyn Error>> {
