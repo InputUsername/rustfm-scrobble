@@ -1,3 +1,9 @@
+Version 1.1.3 - 2022-11-16
+========================
+
+  * Update `attohttpc` dependency to v0.24
+  * Update `mockito` dev-dependency to v0.31
+
 Version 1.1.2 - 2022-07-19
 ========================
 
