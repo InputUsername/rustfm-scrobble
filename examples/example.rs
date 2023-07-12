@@ -16,7 +16,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let response = scrobbler.authenticate_with_password(username, password)?;
     println!("Authenticated! {:#?}", response);
 
-    let track = Scrobble::new("Los Campesinos!", "As Lucerne / The Low", "No Blues");
+    let track = Scrobble::new("Los Campesinos!", "As Lucerne / The Low", Some("No Blues"));
     let response = scrobbler.now_playing(&track)?;
     println!("Sent now playing! {:#?}", response);
 
