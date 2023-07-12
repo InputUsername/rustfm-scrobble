@@ -1,3 +1,9 @@
+Next - unreleased
+========================
+
+  * Make `Scrobble`'s album optional
+  * Update `attohttpc` dependency to v0.25
+
 Version 1.1.3 - 2022-11-16
 ========================
 
