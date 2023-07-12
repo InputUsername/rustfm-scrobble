@@ -163,7 +163,7 @@ pub mod metadata {
     /// Repesents a single music track played at a point in time. In the Last.fm universe, this is known as a 
     /// "scrobble".
     /// 
-    /// Takes an artist, track and album name. Can hold a timestamp indicating when the track was listened to.
+    /// Takes an artist, track and optional album name. Can hold a timestamp indicating when the track was listened to.
     /// `Scrobble` objects are submitted via [`Scrobbler::now_playing`], [`Scrobbler::scrobble`] and batches of
     /// Scrobbles are sent via [`Scrobbler::scrobble_batch`].
     /// 
@@ -177,7 +177,7 @@ pub mod metadata {
     pub struct Scrobble {
         artist: String,
         track: String,
-        album: String,
+        album: Option<String>,
 
         timestamp: Option<u64>,
     }
@@ -185,20 +185,20 @@ pub mod metadata {
     impl Scrobble {
     
         /// Constructs a new Scrobble instance, representing a single playthrough of a music track. `Scrobble`s are 
-        /// submitted to Last.fm via an instance of [`Scrobbler`]. A new `Scrobble` requires an artist name, song/track
-        /// name, and an album name.
+        /// submitted to Last.fm via an instance of [`Scrobbler`]. A new `Scrobble` requires an artist name and song/track
+        /// name, and an optional album name.
         /// 
         /// # Example
         /// ```ignore
-        /// let scrobble = Scrobble::new("Example Artist", "Example Track", "Example Album")
+        /// let scrobble = Scrobble::new("Example Artist", "Example Track", Some("Example Album"));
         /// ```
         /// 
         /// [`Scrobbler`]: struct.Scrobbler.html
-        pub fn new(artist: &str, track: &str, album: &str) -> Self {
+        pub fn new(artist: &str, track: &str, album: Option<&str>) -> Self {
             Self {
                 artist: artist.to_owned(),
                 track: track.to_owned(),
-                album: album.to_owned(),
+                album: album.map(ToOwned::to_owned),
                 timestamp: None,
             }
         }
@@ -224,9 +224,9 @@ pub mod metadata {
             self
         }
 
-        /// Converts the Scrobble metadata (track name, artist & album name) into a `HashMap`. Map keys are 
-        /// `"track"`, `"artist"` and `"album"`. If a timestamp is set, it will be present in the map under key 
-        /// `"timestamp"`.
+        /// Converts the Scrobble metadata (track name, artist & album name) into a `HashMap`. Map keys are
+        /// `"track"` and `"artist"`. If the album is set, it will be present in the map under key `"album"`.
+        /// If a timestamp is set, it will be present in the map under key `"timestamp"`.
         /// 
         /// # Example
         /// ```ignore
@@ -238,7 +238,10 @@ pub mod metadata {
             let mut params = HashMap::new();
             params.insert("track".to_string(), self.track.clone());
             params.insert("artist".to_string(), self.artist.clone());
-            params.insert("album".to_string(), self.album.clone());
+
+            if let Some(ref album) = self.album {
+                params.insert("album".to_string(), album.clone());
+            }
 
             if let Some(timestamp) = self.timestamp {
                 params.insert("timestamp".to_string(), timestamp.to_string());
@@ -258,8 +261,8 @@ pub mod metadata {
         }
 
         /// Returns the `Scrobble`'s album name
-        pub fn album(&self) -> &str {
-            &self.album
+        pub fn album(&self) -> Option<&str> {
+            self.album.as_deref()
         }
     
     }
@@ -269,7 +272,7 @@ pub mod metadata {
     /// Designed to make it easier to cooperate with other track info types.
     impl From<&(&str, &str, &str)> for Scrobble {
         fn from((artist, track, album): &(&str, &str, &str)) -> Self {
-            Scrobble::new(artist, track, album)
+            Scrobble::new(artist, track, Some(album))
         }
     }
 
@@ -278,7 +281,7 @@ pub mod metadata {
     /// Designed to make it easier to cooperate with other track info types.
     impl From<&(String, String, String)> for Scrobble {
         fn from((artist, track, album): &(String, String, String)) -> Self {
-            Scrobble::new(artist, track, album)
+            Scrobble::new(artist, track, Some(album))
         }
     }
 
@@ -319,12 +322,12 @@ pub mod metadata {
             let mut scrobble = Scrobble::new(
                 "foo floyd and the fruit flies",
                 "old bananas",
-                "old bananas",
+                Some("old bananas"),
             );
             scrobble.with_timestamp(1337);
             assert_eq!(scrobble.artist(), "foo floyd and the fruit flies");
             assert_eq!(scrobble.track(), "old bananas");
-            assert_eq!(scrobble.album(), "old bananas");
+            assert_eq!(scrobble.album(), Some("old bananas"));
             assert_eq!(scrobble.timestamp, Some(1337));
         }
 
@@ -333,7 +336,7 @@ pub mod metadata {
             let scrobble = Scrobble::new(
                 "foo floyd and the fruit flies",
                 "old bananas",
-                "old bananas",
+                Some("old bananas"),
             );
 
             let params = scrobble.as_map();
