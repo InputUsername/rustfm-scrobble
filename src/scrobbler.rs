@@ -386,7 +386,7 @@ mod tests {
         let mut scrobble = crate::models::metadata::Scrobble::new(
             "foo floyd and the fruit flies",
             "old bananas",
-            "old bananas",
+            Some("old bananas"),
         );
         scrobble.with_timestamp(1337);
 
@@ -434,7 +434,7 @@ mod tests {
         let mut scrobble = crate::models::metadata::Scrobble::new(
             "foo floyd and the fruit flies",
             "old bananas",
-            "old bananas",
+            Some("old bananas"),
         );
         scrobble.with_timestamp(1337);
 

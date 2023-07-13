@@ -6,10 +6,13 @@ rustfm-scrobble-proxy
 ---
 
 *rustfm-scrobble-proxy* is a fork of [rustfm-scrobble](https://github.com/dmfutcher/rustfm-scrobble).
-Its API is identical, but it replaces the internal [ureq](https://crates.io/crates/ureq) HTTP client with [attohttpc](https://crates.io/crates/attohttpc).
+Its API is (mostly) identical, but it replaces the internal [ureq](https://crates.io/crates/ureq) HTTP client with [attohttpc](https://crates.io/crates/attohttpc).
 This allows the library to be used behind a proxy seamlessly, as attohttpc picks up proxy settings automatically, unlike ureq.
+In addition, scrobbling tracks without an album is now allowed.
 
-rustfm-scrobble is licensed under the MIT license. See the [`LICENSE`](https://github.com/InputUsername/rustfm-scrobble-proxy) file for more information. Below is the original README.
+To see all changes, see the [`CHANGELOG.md`](https://github.com/InputUsername/rustfm-scrobble-proxy/blob/main/CHANGELOG.md) file. The fork happened in version 1.1.2.
+
+rustfm-scrobble is licensed under the MIT license. See the [`LICENSE`](https://github.com/InputUsername/rustfm-scrobble-proxy/blob/main/LICENSE) file for more information. Below is the original README.
 
 ---
 
